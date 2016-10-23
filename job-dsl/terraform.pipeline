@@ -1,0 +1,37 @@
+stage('Plan') {
+
+    node {
+        git "https://github.com/nautsio/jenkins-docker-starter"
+
+        withCredentials([
+            [$class: 'StringBinding', credentialsId: 'aws-ops-access-key-id', variable: 'AWS_ACCESS_KEY_ID'],
+            [$class: 'StringBinding', credentialsId: 'aws-ops-secret-access-key', variable: 'AWS_SECRET_ACCESS_KEY']])
+        {
+            wrap([$class: 'AnsiColorBuildWrapper', 'colorMapName': 'XTerm']) {
+                sh "cd terraform && make plan ENV=%%ENV%% SECRETS=./secrets.tfvars"
+            }
+        }
+
+        stash includes: 'terraform/terraform_plan', name: 'terraform_plan'
+    }
+
+}
+
+input 'Apply?'
+
+stage('Apply') {
+
+    node {
+        unstash 'terraform_plan'
+
+        withCredentials([
+            [$class: 'StringBinding', credentialsId: 'aws-ops-access-key-id', variable: 'AWS_ACCESS_KEY_ID'],
+            [$class: 'StringBinding', credentialsId: 'aws-ops-secret-access-key', variable: 'AWS_SECRET_ACCESS_KEY']])
+        {
+            wrap([$class: 'AnsiColorBuildWrapper', 'colorMapName': 'XTerm']) {
+                sh "cd terraform && make apply ENV=%%ENV%%"
+            }
+        }
+    }
+
+}

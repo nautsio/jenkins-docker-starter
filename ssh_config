@@ -1,0 +1,4 @@
+Host bastion
+    User ubuntu
+    Hostname bastion.aws.company.nl
+    LogLevel Quiet
