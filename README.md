@@ -7,12 +7,6 @@ This repository contains example code on how to automatically bootstrap and conf
 container. It contains groovy code that configures Jenkins on startup and provides examples of how to use the Job- and
 Pipeline DSL to automatically configure Jenkins.
 
-## Caveats
-
-Although the job configuration is fully automatic it does require that you enter the necessary credentials manually with
-the credentials plugin. If you want, you could replace this with something like Vault but that would require additional
-setup with an external dependency.
-
 ## Setup
 
 The following sections describe each part of the Jenkins docker setup in detail.
@@ -65,6 +59,12 @@ The approach taken here is to put an increasing version number behind the main J
 directory (/var/jenkins_home in the container) to the host system then you can just replace the Jenkins container with
 the new version and all jobs will be updated automatically to the new config on restart, while keeping any history and
 settings that were there already. This makes for a nice, fast upgrade workflow.
+
+## Caveats
+
+Although the job configuration is fully automatic it does require that you enter the necessary credentials manually with
+the credentials plugin. If you want, you could replace this with something like Vault but that would require additional
+setup with an external dependency.
 
 I hope this repository provides a nice overview of what it takes to create a dockerized Jenkins that is easily
 maintainable and configured fully automatically.
