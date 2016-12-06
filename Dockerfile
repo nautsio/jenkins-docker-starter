@@ -16,6 +16,10 @@ RUN apk add --update jq make git curl openssl-dev libffi-dev musl-dev gcc python
     rm -f terraform_${TERRAFORM_VERSION}_linux_amd64.zip && \
     apk del openssl-dev libffi-dev musl-dev gcc python-dev py-pip
 
+# Set the correct timezone
+RUN apk add -U tzdata
+RUN cp /usr/share/zoneinfo/Europe/Amsterdam /etc/localtime
+
 # Switch back to non-privileged Jenkins user
 USER jenkins
 
